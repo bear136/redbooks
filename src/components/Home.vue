@@ -70,6 +70,7 @@ export default {
   methods: {
     addDynamicShow () {
       this.selectType = true
+      
     },
     goToTakePhoto () {
       this.$router.push({
