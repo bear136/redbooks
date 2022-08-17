@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible"
+              content="IE=edge">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+
+    <body>
+        <script>
+            function myInstanceOf1 (target, targetProto) {
+                let proto = Object.getPrototypeOf(target)
+                let protoObj = targetProto.prototype
+                while (1) {
+                    if (proto === null) return false
+                    if (proto === protoObj) return true
+                    proto = Object.getPrototypeOf(proto)
+                }
+            }
+            function a () {
+                console.log(111)
+            }
+
+            function myInstanceof2 (left, right) {
+                if (typeof left !== 'object') {
+                    return false
+                }
+                // 获取对象的原型
+                let proto = Object.getPrototypeOf(left)
+                // 获取构造函数的 prototype 对象
+                let prototype = right.prototype
+
+                // 判断构造函数的 prototype 对象是否在对象的原型链上
+                while (true) {
+                    if (!proto) return false
+                    if (proto === prototype) return true
+                    // 如果没有找到，就继续从其原型上找，Object.getPrototypeOf方法用来获取指定对象的原型
+                    proto = Object.getPrototypeOf(proto)
+                }
+            }
+            console.log(Number.isNaN(1))
+            var partition = function (s) {
+                let targetArr = s.split('')
+                let res = []
+                let checkIsReserveStr = (str) => {
+                    if (str === '') return false
+                    let str2 = str.split('').reverse().join('')
+                    return str === str2
+                }
+                let getArr = (targetArr, startIndex, path) => {
+                    if (checkIsReserveStr(path.join(''))) {
+                        res.push(path.slice())
+                        return
+                    }
+                    if (path.length > targetArr.length) {
+                        return
+                    }
+                    for (let i = startIndex; i < targetArr.length; i++) {
+                        path.push(startIndex[i])
+                        getArr(targetArr, i, path)
+                        path.pop()
+                    }
+                }
+                getArr(targetArr, 0, [])
+                return res
+            }
+            console.log(partition('aab'));
+        </script>
+    </body>
+
+</html>
