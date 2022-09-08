@@ -9,8 +9,10 @@ export default {
             content: '',
             comment_time: '',
             reply_comment_id: 0,
-            reply_user_id: 0
-        }  //
+            reply_user_id: 0,
+            comment_group: 0
+        },
+        authorId: 0
     },
     mutations: {
         updateComment (state, info) {
@@ -21,8 +23,12 @@ export default {
                         Vue.set(state.commentObj, item, info[item])
                     }
                 })
-                Vue.set(state.commentObj, 'comment_time', moment().format('YYYY/MM/DD HH:mm'))
+                Vue.set(state.commentObj, 'comment_time', moment().format('YYYY-MM-DD HH:mm:ss'))
             }
+        },
+        updateAuthorInfo (state, info) {
+            if (info === null) return
+            state.authorId = info.id
         }
 
     },
@@ -30,11 +36,16 @@ export default {
         addReviewInfo (context, value) {
             context.commit('updateComment', value)
         },
-
+        changeUserId (context, value) {
+            context.commit('updateAuthorInfo', value)
+        }
     },
     getters: {
         getAllInfo (state) {
             return state.commentObj
+        },
+        getUserId (state) {
+            return state.authorId
         }
     }
 }

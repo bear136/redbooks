@@ -6,7 +6,6 @@ function formattUrl (imgUrl) {
 
 //格式化文件
 function forrmatFileUrl (obj) {
-    
     const defalutUrl = "http://123.57.180.25:9000"
     // let obj = JSON.parse(JSON.stringify(fileUrl))
     const type = typeof (obj)
@@ -45,8 +44,43 @@ function forrmatFileUrl (obj) {
     }
     return obj
 }
+const debounce = (func, delay = 1000) => {
+    let timeout = 0
+    return (...args) => {
+        // 如果没有阻断
+        if (!timeout) {
+            // 那么开始阻断
+            timeout = setTimeout(() => {
+                // delay之后解除阻断
+                timeout = 0
+            }, delay)
+            // 立即执行
+            func.apply(this, args)
+        } else {
+            // 什么也不做
+        }
+    }
+}
+
+
+// function debounce (func, wait = 1000) {
+//     let timeout
+
+//     return function () {
+
+//         let context = this // 保存this指向
+//         let args = arguments // 拿到event对象
+//         if (timeout) {
+//             clearTimeout(timeout)
+//         }
+//         timeout = setTimeout(function () {
+//             func.apply(context, args)
+//         }, wait)
+//     }
+// }
 
 export {
     formattUrl,
-    forrmatFileUrl
+    forrmatFileUrl,
+    debounce
 }

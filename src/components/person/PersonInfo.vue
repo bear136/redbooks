@@ -22,10 +22,33 @@
                   hairline>编辑资料</van-button>
       <van-button size="small"
                   round
+                  @click="setting()"
                   hairline>
         <van-icon name="setting-o"
                   size="20" />
       </van-button>
+      <van-popup v-model="show"
+                 position="right"
+                 :style="{ width: '50%',height:'100%'}">
+        <div class="popupBox">
+          <div v-for="(item,index) in option"
+               :key="index">
+            <div class="popuItem"
+                 @click="goToChangeAccount(item.value)">
+              <van-icon :name="item.icon"
+                        size="17px" />
+              {{item.value}}
+            </div>
+          </div>
+          <van-divider />
+          <div class="loginOut">
+            <div class="loginOutBtn"
+                 @click="loginOut()">
+              退出登录
+            </div>
+          </div>
+        </div>
+      </van-popup>
     </div>
   </div>
 
@@ -33,32 +56,78 @@
 
 <script>
 import InfoView from './InfoView.vue'
+import { mapActions } from 'vuex'
 import { forrmatFileUrl } from '../../utils/utils'
 export default {
   data () {
     return {
-      // 伪代码
       info: {},
       follow_count: 0,
-      fans_count: 0
+      fans_count: 0,
+      show: false,
+      option: [
+        {
+          value: '账号与安全',
+          icon: 'manager-o'
+        },
+        {
+          value: '我的订单',
+          icon: 'cart-o'
+        },
+        {
+          value: '我的钱包',
+          icon: 'balance-pay'
+        },
+        {
+          value: '我的优惠卷',
+          icon: 'coupon-o'
+        },
+        {
+          value: '我的二维码',
+          icon: 'qr'
+        },
+        {
+          value: '观看历史',
+          icon: 'underway-o'
+        },
+
+        {
+          value: '创作者服务中心',
+          icon: 'wap-home-o'
+        }
+      ]
     }
   },
   components: {
     InfoView
   },
   methods: {
+    ...mapActions(['changeInfo']),
+    goToChangeAccount (value) {
+      if (value === '账号与安全') {
+        this.$router.push('/editAccount')
+      }
+    },
     editUserInfo () {
       this.$router.push('/editInfo')
     },
     gotoFans (index) {
       this.$router.push('/fans')
+    },
+    setting () {
+      this.show = true
+    },
+    loginOut () {
+      window.localStorage.clear()
+      this.$router.push('/login')
     }
   },
   mounted () {
     this.$http.get('/userInfo/getUserInfo').then((res, err) => {
       res = res.data
       if (res.status === 'success') {
-        this.info = forrmatFileUrl(res.data)
+        this.changeInfo(res.data.user)
+        this.info = forrmatFileUrl(res.data.userinfo)
         window.sessionStorage.setItem('userid', this.info.userid)
       }
     })
@@ -99,6 +168,37 @@ export default {
         color: #fff;
         // mix-blend-mode: difference;
         background-color: rgba(255, 255, 255, 0);
+    }
+}
+.popupBox {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    color: #000;
+    .popuItem {
+        padding-left: 20px;
+        font-size: 17px;
+        text-align: left;
+    }
+    .loginOut {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 60px;
+        .loginOutBtn {
+            height: 40px;
+            width: 80%;
+            border: 1px solid #000;
+            text-align: center;
+            line-height: 40px;
+            box-sizing: border-box;
+            font-size: 17px;
+        }
     }
 }
 </style>

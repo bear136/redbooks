@@ -33,7 +33,11 @@ import {
     Popup,
     Circle,
     List,
-    SwipeCell
+    SwipeCell,
+    Search,
+    Divider,
+    Loading
+
 } from 'vant'
 Vue.prototype.$Toast = Toast
 Vue.use(Button)
@@ -68,4 +72,7 @@ Vue.use(Popup)
 Vue.use(Circle)
 Vue.use(List)
 Vue.use(SwipeCell)
+Vue.use(Search)
+Vue.use(Divider)
+Vue.use(Loading)
 Vue.prototype.$dialog = Dialog

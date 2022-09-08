@@ -71,7 +71,8 @@ export default {
         article_id: 0,
         level: 1,
         reply_comment_id: 0,
-        reply_user_id: 0
+        reply_user_id: 0,
+        comment_group: 0
       }
     }
   },
@@ -137,18 +138,23 @@ export default {
           article_id: this.msgId
         }
       })
+
       if (res.status === 'success') {
         const result = forrmatFileUrl(res.articleInfo)
         this.content = result.content
         this.bgImg = result.cover_url
+          ? result.cover_url
+          : 'https://www4.bing.com//th?id=OHR.CostadaMorte_ZH-CN5219249535_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&pid=hp&w=240&h=135'
         this.username = result.author_info.username
-        this.videoPath = result.resource_url[0]
+        this.videoPath = result.resource_url ? result.resource_url[0] : ''
         this.actionInfo.give_like_count = result.give_like_count
         this.actionInfo.comment_count = result.comment_count
         this.actionInfo.userInfo = result.author_info
         this.reviewObj.reply_user_id = result.author_info.userid
         this.reviewObj.article_id = Number(this.msgId)
+        this.reviewObj.comment_group = Number(this.msgId)
         this.$store.dispatch('reviewInfo/addReviewInfo', this.reviewObj)
+        this.$store.dispatch('reviewInfo/changeUserId', { id: result.author_info.userid })
       }
     }
   }

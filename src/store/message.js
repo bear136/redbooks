@@ -34,12 +34,12 @@ export default {
     getters: {
         getMsg (state) {
             return (sign) => {
+                if (Object.keys(state.historyMsg).length === 0) return
                 if (state.historyMsg.data[sign]) {
                     return state.historyMsg.data[sign]
                 } else {
                     return null
                 }
-
             }
         },
         getAllMsg (state) {

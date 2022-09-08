@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-show="msgShow">
     <!-- 实现下拉刷新 -->
     <van-nav-bar title="消息"
                  fixed />
@@ -11,25 +11,37 @@
         <div class="topnav">
           <van-row type="flex"
                    justify="space-around">
-            <van-col>
+
+            <van-col @click="skipToLike()">
+              <van-badge :content="notifyCount.giveLike"
+                         v-show="notifyCount.giveLike" />
               <van-icon name="like"
                         size="24px"
                         color="rgb(252,94,91)"
                         style="background-color:rgb(255,237,235);" />
+
               <span>赞和收藏</span>
             </van-col>
-            <van-col>
+
+            <van-col @click="skipToFocus()">
+              <van-badge :content="notifyCount.follow"
+                         v-show="notifyCount.follow!==0" />
               <van-icon name="friends"
                         size="24px"
                         color="rgb(54,134,255)"
                         style="background-color:rgb(231,240,255);" />
+
               <span>新增关注</span>
+
             </van-col>
-            <van-col>
+            <van-col @click="skipToComment()">
+              <van-badge :content="notifyCount.comment"
+                         v-show="notifyCount.comment!==0" />
               <van-icon name="comment"
                         size="24px"
                         color="rgb(52,216,153)"
                         style="background-color:rgb(231,252,242);" />
+
               <span>评论和@</span>
             </van-col>
           </van-row>
@@ -51,6 +63,8 @@
                     <span class="timer">{{showMsg(item.history_data)[0]}}</span>
                   </div>
                   <p>{{showMsg(item.history_data)[2]}}</p>
+                  <div class="unreadChat"
+                       v-show="unreadChatNum(item.unreadInfo)!=0">{{unreadChatNum(item.unreadInfo)}}</div>
                 </div>
               </div>
             </div>
@@ -67,11 +81,10 @@ export default {
   data () {
     return {
       isLoading: false,
-      msglist: {}
+      msglist: {},
+      notifyCount: {},
+      msgShow: false
     }
-  },
-  mounted () {
-    this.msglist = forrmatFileUrl(this.$store.getters['messInfo/getAllMsg'])
   },
   methods: {
     // 实现下拉刷新
@@ -79,6 +92,7 @@ export default {
       setTimeout(() => {
         this.isLoading = false
         this.msglist = forrmatFileUrl(this.$store.getters['messInfo/getAllMsg'])
+
         console.log('刷新成功')
       }, 1000)
     },
@@ -86,7 +100,39 @@ export default {
     skipChat (res) {
       // 把user的id传过去
       this.$router.push({ name: 'Chatpage', query: { userId: res } })
+    },
+    skipToLike () {
+      this.$router.push('/likeNotify')
+    },
+    skipToFocus () {
+      this.$router.push('/focusNotify')
+    },
+    skipToComment () {
+      this.$router.push('/commentNotify')
+    },
+    async getNotifyCount () {
+      const { data: res } = await this.$http.get('/notify/getUnreadNotify')
+      if (res.status === 'success') {
+        this.notifyCount = res.unreadNotify
+      }
+    },
+    async getUnreadChat () {
+      const { data: res } = await this.$http.get('/notify/getUnreadChat')
+      if (res.status === 'success') {
+        if (res.unreadChatList !== null && res.unreadChatList.length !== 0) {
+          console.log(res)
+          res.unreadChatList.map(item => {
+            this.$set(this.msglist.data[item.chat_userid], 'unreadInfo', item)
+          })
+        }
+      }
+      this.msgShow = true
     }
+  },
+  created () {
+    this.msglist = forrmatFileUrl(this.$store.getters['messInfo/getAllMsg'])
+    this.getNotifyCount()
+    this.getUnreadChat()
   },
   computed: {
     showMsg () {
@@ -95,6 +141,14 @@ export default {
         const arr = item[n - 1].split('+')
         arr[0] = arr[0].slice(5, 19)
         return arr
+      }
+    },
+    unreadChatNum () {
+      return item => {
+        if (item === undefined) return
+        else {
+          return item.unread_num
+        }
       }
     }
   }
@@ -113,6 +167,13 @@ export default {
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        position: relative;
+        .van-badge {
+            position: absolute;
+            right: 15px;
+            top: 5px;
+            z-index: 20;
+        }
         .van-icon {
             height: 35px;
             width: 35px;
@@ -143,6 +204,7 @@ export default {
     }
     .rightbox {
         width: 70%;
+        position: relative;
         background-color: #fff;
         padding: 2px;
         box-sizing: border-box;
@@ -150,11 +212,12 @@ export default {
         align-items: center;
         justify-content: space-around;
         flex-direction: column;
+
         .title {
             font-size: 16px;
         }
         .timer {
-            float: right;
+            margin-left: 40px;
             color: #ccc;
             font-size: 14px;
         }
@@ -164,6 +227,20 @@ export default {
             white-space: nowrap;
             text-overflow: ellipsis;
             margin-top: 4px;
+            font-size: 14px;
+        }
+        .unreadChat {
+            position: absolute;
+            right: 5px;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background-color: #ee0a24;
+            color: #fff;
+            top: 50%;
+            transform: translateY(-50%);
+            line-height: 20px;
+            text-align: center;
             font-size: 14px;
         }
     }

@@ -2,7 +2,7 @@ import SparkMD5 from "spark-md5"
 const spark = new SparkMD5.ArrayBuffer()
 const reader = new FileReader()
 //文件阈值
-const FILESIZE_THRESHOLD = 500 * 1024 * 1024
+const FILESIZE_THRESHOLD = 5000 * 1024 * 1024
 function calculateHashSample (file) {
     const size = file.size
     let chunks = []

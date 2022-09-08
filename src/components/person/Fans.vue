@@ -25,7 +25,7 @@
 
 <script>
 import FansItems from './FansItems.vue'
-import { formattUrl, forrmatFileUrl } from '../../utils/utils'
+import {  forrmatFileUrl } from '../../utils/utils'
 export default {
   data () {
     return {

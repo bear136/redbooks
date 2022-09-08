@@ -50,6 +50,7 @@
         </div>
       </div>
     </van-popup>
+
   </div>
 </template>
 
@@ -58,19 +59,14 @@ export default {
   data () {
     return {
       active: 0,
-      msgCount: 99, // 消息数量,
+      msgCount: 0, // 消息数量,
       selectType: false
     }
   },
-  mounted () {
-    this.$http.get('/article/pushArticleFeed').then(res => {
-      console.log(res)
-    })
-  },
+  mounted () {},
   methods: {
     addDynamicShow () {
       this.selectType = true
-      
     },
     goToTakePhoto () {
       this.$router.push({

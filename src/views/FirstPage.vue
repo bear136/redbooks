@@ -7,7 +7,8 @@
               animated>
       <van-tab title="关注">
         <Browse v-bind:info='articleFromFollow'
-                v-show="articleFromFollow" />
+                v-show="articleFromFollow"
+                :isAll="FocusIsAll" />
         <van-empty description="您的关注列表还没有发布作品哦！"
                    v-show="!articleFromFollow" />
       </van-tab>
@@ -25,6 +26,7 @@
               </div>
             </template>
             <Browse v-bind:info='articleFromType'
+                    :isAll="true"
                     v-show="articleFromType" />
             <van-empty description="还没有人发布此类型的作品哦！"
                        v-show="!articleFromType" />
@@ -33,9 +35,16 @@
       </van-tab>
       <van-tab title="朋友">
         <Browse v-bind:info='articleFromFriends'
+                :isAll="friendIsAll"
                 v-show="articleFromFriends" />
         <van-empty description="您的朋友还没有发布作品哦！"
                    v-show="!articleFromFriends" />
+      </van-tab>
+      <van-tab>
+        <template #title>
+          <van-icon name="search"
+                    size="20" />
+        </template>
       </van-tab>
 
     </van-tabs>
@@ -62,7 +71,9 @@ export default {
       articleFromFollow: null,
       articleFromFriends: null,
       typeList: [],
-      articleFromType: null
+      articleFromType: null,
+      friendIsAll: false,
+      FocusIsAll: false
     }
   },
   components: {
@@ -83,14 +94,23 @@ export default {
     changeBrow (native) {
       switch (native) {
         case 0:
-          this.getArticleFromFollow()
+          this.getArticleFromFollow().then(res => {
+            this.articleFromFollow = res
+          })
           break
         case 1:
           break
         case 2:
-          this.getArticleFromFriend()
+          this.getArticleFromFriend().then(res => {
+            this.articleFromFriends = res
+          })
           break
+        case 3:
+          this.goToSearch()
       }
+    },
+    goToSearch () {
+      this.$router.push('/search')
     },
     getTypesArticle (name = 1) {
       this.getArticleByType(name)
@@ -110,8 +130,9 @@ export default {
       const { data: res } = await this.$http.get('/article/getArticleFromFollow', {
         params: this.pageFollowInfo
       })
+      console.log(res)
       if (res.status === 'success') {
-        this.articleFromFollow = res.articleInfoList ? forrmatFileUrl(res.articleInfoList) : null
+        return res.articleInfoList ? forrmatFileUrl(res.articleInfoList) : null
       }
     },
     async getArticleFromFriend () {
@@ -120,13 +141,33 @@ export default {
       })
       console.log(res)
       if (res.status === 'success') {
-        this.articleFromFriends = res.articleInfoList ? forrmatFileUrl(res.articleInfoList) : null
+        return res.articleInfoList ? forrmatFileUrl(res.articleInfoList) : null
+      }
+    },
+    async getAll () {
+      if (this.active === 0) {
+        this.pageFollowInfo.pageIndex++
+        const res = await this.getArticleFromFollow()
+        if (res !== null) {
+          this.articleFromFollow.push(...res)
+        } else {
+          this.FocusIsAll = true
+        }
+      } else if (this.active === 2) {
+        this.pageFriendInfo.pageIndex++
+        const res = await this.getArticleFromFriend()
+        if (res !== null) {
+          this.articleFromFriends.push(...res)
+        } else {
+          this.friendIsAll = true
+        }
       }
     }
   },
   mounted () {
     this.getType()
     this.getTypesArticle()
+    this.$bus.$on('getAllarticle', this.getAll)
   }
 }
 </script>

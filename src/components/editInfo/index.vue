@@ -89,6 +89,7 @@
 </template>
 
 <script>
+import { forrmatFileUrl } from '../../utils/utils'
 import { areaList } from '@vant/area-data'
 export default {
   data () {
@@ -207,15 +208,15 @@ export default {
   },
   mounted () {
     this.$http.get('/userInfo/getUserInfo').then((res, err) => {
-      res = res.data
-      if (res.status === 'success') {
-        this.editObj.date = res.data.birthday
-        this.editObj.sex = res.data.sex
-        this.editObj.name = res.data.username
-        this.editObj.intro = res.data.info
-        this.editObj.address = res.data.place
-        this.head_photo = `${this.defalutUrl}${res.data.head_photo.slice(1, res.length)}`
-        this.bgObj.photoList = `${this.defalutUrl}${res.data.back_photo.slice(1, res.length)}`
+      const userInfo = forrmatFileUrl(res.data.data.userinfo)
+      if (res.data.status === 'success') {
+        this.editObj.date = userInfo.birthday
+        this.editObj.sex = userInfo.sex
+        this.editObj.name = userInfo.username
+        this.editObj.intro = userInfo.info
+        this.editObj.address = userInfo.place
+        this.head_photo = userInfo.head_photo
+        this.bgObj.photoList = userInfo.back_photo
       }
     })
   }

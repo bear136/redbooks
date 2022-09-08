@@ -81,11 +81,11 @@ export default {
   },
   methods: {
     uploadVideo (info) {
+      console.log(info)
       const { articleFileDir, coverFilePath, isVideo } = info
       this.articleInfo.articleFileDir = articleFileDir
       this.articleInfo.coverFilePath = coverFilePath
       this.articleInfo.is_video = isVideo
-      console.log(info)
     },
     onClickLeft () {
       this.$router.push('/home')

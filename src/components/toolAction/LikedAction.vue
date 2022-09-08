@@ -19,7 +19,7 @@
     <div class="sharePart childPart">
       <van-icon name="share"
                 color="#fff" />
-      <span>94568</span>
+      <span>0</span>
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@ export default {
           article_id: this.$route.query.messageId
         }
       })
-      console.log(res)
+
       if (res.status === 'success') {
         this.likedcolor = res.isGiveLike ? '#f40' : '#fff'
       }
@@ -63,6 +63,7 @@ export default {
   mounted () {
     this.getLiked()
     this.$bus.$on('doubleClick', this.giveLike)
+    this.$bus.$on('getNewLikeInfo', this.getLiked)
   },
   props: ['actionInfo']
 }

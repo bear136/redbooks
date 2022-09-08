@@ -8,18 +8,19 @@
     <!-- 聊天信息 -->
     <div class="chattingRecords"
          ref="chattingRecords">
-
-      <div :class=" item[0] === 'send' ? 'message2' : 'message1'"
-           v-for="(item, index) in messageList"
-           :key="index"
-           ref="msgItem">
-        <van-image round
-                   width="40px"
-                   height="40px"
-                   :src=" item[0] === 'send' ? proFilePhoto : userInfo.head_photo " />
-        <p>
-          {{item[1]}}
-        </p>
+      <div>
+        <div :class=" item[0] === 'send' ? 'message2' : 'message1'"
+             v-for="(item, index) in messageList"
+             :key="index"
+             ref="msgItem">
+          <van-image round
+                     width="40px"
+                     height="40px"
+                     :src=" item[0] === 'send' ? proFilePhoto : userInfo.head_photo " />
+          <p>
+            {{item[1]}}
+          </p>
+        </div>
       </div>
 
     </div>
@@ -65,20 +66,28 @@ export default {
   },
   computed: {
     msgarr () {
-      return this.$store.getters['messInfo/getMsg'](this.userId)
+      try {
+        return this.$store.getters['messInfo/getMsg'](Number(this.$route.query.userId))
+      } catch (error) {
+        console.log('computed', error)
+      }
     }
   },
   watch: {
     msgarr: {
       handler (newVal, oldVal) {
-        if (newVal !== null) {
-          console.log(newVal)
-          this.userInfo = forrmatFileUrl(newVal.user_info)
-          const historyMsg = newVal.history_data
-          historyMsg.forEach(i => {
-            const arr = i.split('+')
-            this.messageList.push([arr[1], arr[2]])
-          })
+        try {
+          if (newVal != null) {
+            this.userInfo = forrmatFileUrl(newVal.user_info)
+            const historyMsg = newVal.history_data
+            this.messageList = []
+            historyMsg.forEach(i => {
+              const arr = i.split('+')
+              this.messageList.push([arr[1], arr[2]])
+            })
+          }
+        } catch (error) {
+          console.log(error)
         }
       },
       deep: true,
@@ -87,14 +96,10 @@ export default {
   },
   methods: {
     sendMessage () {
-      console.log('点击发送了')
-      if (!this.sendInfo.client_ids.includes(`${this.userId}`)) {
-        this.sendInfo.client_ids.push(`${this.userId}`)
-      } else {
-        this.$ws.sendSock(this.sendInfo)
-        this.messageList.push(['send', this.sendInfo.content])
-        this.sendInfo.content = ''
-      }
+      this.sendInfo.client_ids = [`${this.userId}`]
+      this.$ws.sendSock(this.sendInfo)
+      this.messageList.push(['send', this.sendInfo.content])
+      this.sendInfo.content = ''
     },
 
     onClickLeft () {
@@ -109,22 +114,30 @@ export default {
     },
     onBottom () {
       const chattingRecords = this.$refs.chattingRecords
-      var height = document.body.clientHeight
-      window.scroll({ top: height, left: 0 })
+      const msgItem = this.$refs.msgItem
       this.$nextTick(() => {
-        chattingRecords.scrollTop = chattingRecords.scrollHeight
+        // console.log('最后一个聊天的坐标', msgItem[msgItem.length - 1].offsetTop)
+        const height = msgItem[msgItem.length - 1].offsetTop
+        chattingRecords.scrollTop = chattingRecords.offsetHeight
       })
     }
   },
   updated () {
     this.onBottom()
   },
+
   mounted () {
     // 获取用msgarr户之间的聊天记录
     this.userId = Number(this.$route.query.userId)
     this.getMsg()
     // 到达最后一个消息的地方
     this.onBottom()
+  },
+  async beforeDestroy () {
+    const { data: res } = await this.$http.put(`/notify/resetUnreadChat?chat_userid=${this.userId}`)
+    if (res.status !== 'success') {
+      throw new Error('重置聊天失败')
+    }
   }
 }
 </script>
@@ -132,8 +145,9 @@ export default {
 <style lang='less' scoped>
 .chattingRecords {
     overflow: auto;
+    box-sizing: border-box;
     margin-top: 46px;
-    min-height: 100vh;
+    min-height: calc(100vh - 121px);
     height: 100%;
     margin-bottom: 75px;
     width: 100%;

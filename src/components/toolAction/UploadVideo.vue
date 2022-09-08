@@ -17,6 +17,18 @@
                 size="small"
                 type="info"
                 @click="uploadVideo">确定上传</van-button>
+    <van-overlay :show="overlayShow">
+      <div class="wrapper">
+        <div class="block">
+          <van-loading size="50px"
+                       vertical>视频上传中...</van-loading>
+        </div>
+        <div class="wrapper_btn"
+             @click="cancelUploader()">
+          取消上传
+        </div>
+      </div>
+    </van-overlay>
   </div>
 </template>
 
@@ -38,7 +50,8 @@ export default {
         isVideo: 1
       },
       showDeletable: true,
-      showBtn: true
+      showBtn: true,
+      overlayShow: false
     }
   },
   components: {
@@ -71,8 +84,10 @@ export default {
         return this.$http.post('/article/chunkUpload', item)
       })
       const res = await Promise.all(updateVideoList)
+
       res.map(item => {
         if (item.data.status !== 'success') {
+          this.overlayShow = false
           return this.$Toast.fail('上传失败，请重试')
         }
       })
@@ -82,19 +97,26 @@ export default {
       formData.append('hashPath', this.hashPath)
       formData.append('fileExt', '.' + file.type.slice(6, file.type.length))
       const { data: result } = await this.$http.post('/article/mergeChunk', formData)
-      const { articleFileDir, coverFilePath } = result
-      this.info.articleFileDir = articleFileDir
-      this.info.coverFilePath = coverFilePath
-      this.showDeletable = false
-      this.showBtn = false
-      this.$emit('uploadVideo', this.info)
+
+      if (result.status === 'success') {
+        const { articleFileDir, coverFilePath } = result
+        this.overlayShow = false
+        this.$Toast.success('视频上传完毕')
+        this.info.articleFileDir = articleFileDir
+        this.info.coverFilePath = coverFilePath
+        this.showDeletable = false
+        this.showBtn = false
+        this.$emit('uploadVideo', this.info)
+      }
     },
+    // 判断文件是否上传过
     async checkUpdateList () {
       const { data: res } = await this.$http.get('/article/articleExist', {
         params: {
           hashPath: this.hashPath
         }
       })
+
       if (res.status === 'success') {
         if (res.articleFileDir !== '') {
           this.info.articleFileDir = res.articleFileDir
@@ -105,16 +127,18 @@ export default {
         }
       }
     },
+    // 确定上传点击事件
     async uploadVideo () {
       if (this.fileList.length === 0) {
         return this.$Toast.fail('请选择视频文件')
       } else {
         const file = this.fileList[0].file
         const updatedList = await this.checkUpdateList()
-        console.log(updatedList)
+        this.overlayShow = true
         if (updatedList === 'success') {
           this.showDeletable = false
           this.showBtn = false
+          this.overlayShow = false
           return this.$Toast.success('上传成功')
         } else {
           const fileChunkList = createFileChunk(file, this.curtSize)
@@ -132,8 +156,16 @@ export default {
         }
       }
     },
-    cancelUploader () {
-      console.log('hello')
+    async cancelUploader () {
+      const file = this.fileList[0].file
+      const formData = new FormData()
+      formData.append('hashPath', this.hashPath)
+      formData.append('fileExt', '.' + file.type.slice(6, file.type.length))
+      const { data: res } = await this.$http.post('/article/cancelChunk', formData)
+      if (res.status === 'success') {
+        this.$Toast.success('取消成功')
+        this.overlayShow = false
+      }
     }
   }
 }
@@ -164,5 +196,35 @@ export default {
 .videoUpdateBox {
     height: 300px;
     width: 300px;
+}
+.wrapper {
+    height: 300px;
+    width: 80%;
+    position: absolute;
+    left: 50%;
+    top: 25%;
+    border-radius: 20px;
+    transform: translateX(-50%);
+    background-color: #fff;
+    overflow: hidden;
+    .block {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+
+        .van-loading__text {
+            font-size: 16px;
+        }
+    }
+    .wrapper_btn {
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        border-top: 1px solid #ccc;
+    }
 }
 </style>

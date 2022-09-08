@@ -98,7 +98,8 @@ export default {
         article_id: 0,
         level: 1,
         reply_comment_id: 0,
-        reply_user_id: 0
+        reply_user_id: 0,
+        comment_group: 0
       }
     }
   },
@@ -123,12 +124,14 @@ export default {
         this.reviewObj.reply_user_id = res.articleInfo.author_id
         this.detialShow = true
         this.$store.dispatch('reviewInfo/addReviewInfo', this.reviewObj)
+        this.$store.dispatch('reviewInfo/changeUserId', { id: res.articleInfo.author_id })
       }
     }
   },
   created () {
     this.msgId = this.$route.query.messageId
     this.reviewObj.article_id = Number(this.msgId)
+    this.reviewObj.comment_group = Number(this.msgId)
     this.getMsgInfo()
   },
   mounted () {}

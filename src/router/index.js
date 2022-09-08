@@ -99,10 +99,69 @@ const routes = [
     name: 'Fans',
     component: () => import('../components/person/Fans.vue')
   },
+  //视频展示界面
   {
     path: '/video',
     name: 'video',
     component: () => import('../views/VideoShow')
+  },
+  /**
+   * 下面的是notify界面
+   */
+  {
+    path: '/likeNotify',
+    name: 'likeNotify',
+    component: () => import('../views/Notify/GiveLikeNotify')
+  },
+  {
+    path: '/focusNotify',
+    name: 'focusNotify',
+    component: () => import('../views/Notify/GiveFocusNotify')
+  },
+  {
+    path: '/commentNotify',
+    name: 'commentNotify',
+    component: () => import('../views/Notify/GiveCommentNotify')
+  },
+  // 搜索页面
+  {
+    path: '/search',
+    name: 'search',
+    component: () => import('../views/Search'),
+  },
+  // 修改账户
+  {
+    path: '/editaccount',
+    name: 'editAccount',
+    component: () => import('../views/EditAccount'),
+    redirect: "/editaccount/accountInfo",
+    children: [
+      {
+        path: 'accountInfo',
+        name: 'accountInfo',
+        component: () => import('../views/AccountInfo/AccountInfo')
+      },
+      {
+        path: 'sendMail',
+        name: 'sendMail',
+        component: () => import('../views/AccountInfo/SendMail')
+      },
+      {
+        path: 'changePhone',
+        name: 'changePhone',
+        component: () => import('../views/AccountInfo/ChangePhone')
+      },
+      {
+        path: 'changePassword',
+        name: 'changePassword',
+        component: () => import('../views/AccountInfo/ChangePassword')
+      },
+      {
+        path: 'changeMail',
+        name: 'changeMail',
+        component: () => import('../views/AccountInfo/ChangeMail')
+      }
+    ]
   }
 
 ]

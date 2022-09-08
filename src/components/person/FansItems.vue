@@ -55,7 +55,7 @@ export default {
       } else if (item.status === 3) {
         return '互相关注'
       } else {
-        return '未关注'
+        return '回关'
       }
     }
   }
