@@ -1,56 +1,40 @@
 <template>
   <div>
+    <!-- 路由渲染区 -->
     <router-view></router-view>
     <!-- 底部导航区 -->
-    <van-tabbar active-color="#ee0a24"
-                v-model="active"
-                route
-                fixed
-                inactive-color="#000">
-      <van-tabbar-item icon="home-o"
-                       to="/first">首页</van-tabbar-item>
-      <van-tabbar-item icon="bag-o"
-                       to="/friends">朋友</van-tabbar-item>
-      <van-tabbar-item color='#fff'
-                       @click="addDynamicShow">
-
-        <van-icon name="plus"
-                  size="20"
-                  class="addDyamic"
-                  color="#fff" />
+    <van-tabbar active-color="#ee0a24" v-model="active" route inactive-color="#000">
+      <van-tabbar-item icon="home-o" to="/first">首页</van-tabbar-item>
+      <van-tabbar-item icon="bag-o" to="/friends">朋友</van-tabbar-item>
+      <van-tabbar-item color="#fff" @click="addDynamicShow">
+        <van-icon name="plus" size="20" class="addDyamic" color="#fff" />
       </van-tabbar-item>
-      <van-tabbar-item icon="comment-circle-o"
-                       to="/message">消息
-        <van-badge :content="msgCount"
-                   v-show="msgCount!==0"
-                   max="99"></van-badge>
+      <van-tabbar-item icon="comment-circle-o" to="/message"
+        >消息
+        <van-badge :content="msgCount" v-show="msgCount !== 0" max="99"></van-badge>
       </van-tabbar-item>
 
-      <van-tabbar-item icon="user-circle-o"
-                       to="/user">我的</van-tabbar-item>
+      <van-tabbar-item icon="user-circle-o" to="/user">我的</van-tabbar-item>
     </van-tabbar>
-    <van-popup v-model="selectType"
-               round
-               closeable
-               position="bottom"
-               :style="{ height: '30%' }">
+    <van-popup
+      v-model="selectType"
+      round
+      closeable
+      position="bottom"
+      :style="{ height: '30%' }"
+    >
       <h4>选择发布类型</h4>
       <div class="selectList">
         <div @click="goToTakePhoto">
-          <van-icon name="photo"
-                    size="40px"
-                    color="#ccc" />
+          <van-icon name="photo" size="40px" color="#ccc" />
           <span>发布图片</span>
         </div>
         <div @click="goToTakeVideo">
-          <van-icon name="video"
-                    color="#ccc"
-                    size="40px" />
+          <van-icon name="video" color="#ccc" size="40px" />
           <span>发布视频</span>
         </div>
       </div>
     </van-popup>
-
   </div>
 </template>
 
@@ -63,7 +47,7 @@ export default {
       selectType: false
     }
   },
-  mounted () { },
+  mounted () {},
   methods: {
     addDynamicShow () {
       this.selectType = true

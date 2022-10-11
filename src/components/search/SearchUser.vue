@@ -1,32 +1,29 @@
 <template>
   <div class="search_list">
-    <van-list v-model="loading"
-              :finished="finished"
-              :immediate-check='false'
-              @load='onload'
-              finished-text="没有更多了">
-      <div class="search_user_item"
-           @click="goToUserInfo(item.userid)"
-           v-for="item in userList"
-           :key="item.userid">
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      :immediate-check="false"
+      @load="onload"
+      finished-text="没有更多了"
+    >
+      <div
+        class="search_user_item"
+        @click="goToUserInfo(item.userid)"
+        v-for="item in userList"
+        :key="item.userid"
+      >
         <div class="user_info">
-          <img :src="item.head_photo"
-               alt="头像">
+          <img :src="item.head_photo" alt="头像" />
           <div class="info_box">
             <h4 class="user_name">
-              {{item.username}}
+              {{ item.username }}
             </h4>
-            <div class="fans_count">
-              粉丝:{{item.fans_count}}
-            </div>
-            <div class="synopsis van-ellipsis">
-              简介: {{item.info}}
-            </div>
+            <div class="fans_count">粉丝:{{ item.fans_count }}</div>
+            <div class="synopsis van-ellipsis">简介: {{ item.info }}</div>
           </div>
         </div>
-        <IsFocus :item='item'
-                 class="isfocus" />
-
+        <IsFocus :item="item" class="isfocus" />
       </div>
     </van-list>
   </div>
@@ -56,6 +53,7 @@ export default {
   },
   methods: {
     onload () {
+      // eslint-disable-next-line no-undef
       if (!userResIsAll) {
         this.$bus.$emit('getMoreUser')
         this.loading = true
@@ -66,9 +64,7 @@ export default {
 
     goToUserInfo (id) {
       this.$router.push({ name: 'otherPerson', query: { userId: id } })
-    },
-
-
+    }
   }
 }
 </script>
@@ -114,7 +110,6 @@ export default {
         }
       }
     }
-
   }
 }
 </style>
