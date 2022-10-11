@@ -1,155 +1,163 @@
 <template>
   <div>
-    <van-nav-bar :title="userInfo.username"
-                 fixed
-                 left-text="返回"
-                 left-arrow
-                 @click-left="onClickLeft" />
+    <van-nav-bar
+      :title="userInfo.username"
+      fixed
+      left-text="返回"
+      left-arrow
+      @click-left="onClickLeft"
+    />
     <!-- 聊天信息 -->
-    <div class="chattingRecords"
-         ref="chattingRecords">
-      <div ref="msgBox">
-        <div :class=" item[0] == 'send' ? 'message2 messageItem' : 'message1 messageItem'"
-             v-for="(item, index) in messageList"
-             :key="index">
-          <van-image round
-                     width="40px"
-                     height="40px"
-                     :src=" item[0] == 'send' ? proFilePhoto : userInfo.head_photo " />
+    <div class="chattingRecords" ref="chattingRecords">
+      <div ref="msgBox" class=''>
+        <div
+          :class="item[0] == 'send' ? 'message2 messageItem' : 'message1 messageItem'"
+          v-for="(item, index) in messageList"
+          :key="index"
+        >
+          <van-image
+            round
+            width="40px"
+            height="40px"
+            :src="item[0] == 'send' ? proFilePhoto : userInfo.head_photo"
+          />
           <p>
-            {{item[1]}}
+            {{ item[1] }}
           </p>
         </div>
       </div>
-
     </div>
     <div class="inputbox">
       <div class="saybox">
         <van-icon name="volume-o" />
       </div>
 
-      <van-field v-model="sendInfo.content"
-                 class="inputdiv"
-                 rows="1"
-                 autosize
-                 type="textarea"
-                 placeholder="请输入..." />
-      <van-button color="linear-gradient(to right, #ff6034, #ee0a24)"
-                  @click="sendMessage"
-                  size="small">
+      <van-field
+        v-model="sendInfo.content"
+        class="inputdiv"
+        rows="1"
+        autosize
+        type="textarea"
+        placeholder="请输入..."
+      />
+      <van-button
+        color="linear-gradient(to right, #ff6034, #ee0a24)"
+        @click="sendMessage"
+        size="small"
+      >
         发送
       </van-button>
     </div>
   </div>
-
 </template>
 
 <script>
-import moment from 'moment'
-import { forrmatFileUrl } from '../../utils/utils'
+import moment from "moment";
+import { forrmatFileUrl } from "../../utils/utils";
 export default {
-  data () {
+  data() {
     return {
       sendInfo: {
         type: 1,
-        content: '',
-        send_time: moment().format('YYYY-MM-DD HH:mm:ss.SSS'),
-        client_ids: []
+        content: "",
+        client_ids: [],
+        send_time: '',
       },
       // 获取到对方用户的信息
-      userId: '',
+      userId: "",
       messageList: [],
       userInfo: {},
-      proFilePhoto: '',
-
-    }
+      proFilePhoto: "",
+    };
   },
   computed: {
-    msgarr () {
+    msgarr() {
       try {
-        return this.$store.getters['messInfo/getMsg'](Number(this.$route.query.userId))
+        return this.$store.getters["messInfo/getMsg"](Number(this.$route.query.userId));
       } catch (error) {
-        console.log('computed', error)
+        console.log("computed", error);
       }
-    }
+    },
   },
   watch: {
     msgarr: {
-      handler (newVal, oldVal) {
+      handler(newVal, oldVal) {
         try {
           if (newVal != null) {
-            this.userInfo = forrmatFileUrl(newVal.user_info)
-            const historyMsg = newVal.history_data
-            this.messageList = []
-            historyMsg.forEach(i => {
-              const arr = i.split('+')
-              this.messageList.push([arr[1], arr[2]])
-            })
+            this.userInfo = forrmatFileUrl(newVal.user_info);
+            const historyMsg = newVal.history_data;
+            this.messageList = [];
+            historyMsg.forEach((i) => {
+              const arr = i.split("+");
+              this.messageList.push([arr[1], arr[2]]);
+            });
           }
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       },
       deep: true,
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     sendMessage () {
-      this.sendInfo.client_ids = [`${this.userId}`]
-      this.$ws.sendSock(this.sendInfo)
+      if(!this.sendInfo.content) return;
+      this.sendInfo.client_ids = [`${this.userId}`];
+      this.sendInfo.send_time = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
+      this.$ws.sendSock(this.sendInfo);
       this.$store.dispatch('messInfo/addUserMsg', {
         ...this.sendInfo,
         from_user: this.userId,
-        msgType: 'send'
-      })
-      this.sendInfo.content = ''
+        msgType: "send",
+      });
+      this.sendInfo.content = "";
     },
 
-    onClickLeft () {
-      this.$router.push('/message')
+    onClickLeft() {
+      this.$router.push("/message");
     },
-    async getMsg () {
-      let { data: res } = await this.$http.get('/userInfo/getUserInfo')
-      if (res.status === 'success') {
-        res = forrmatFileUrl(res)
-        this.proFilePhoto = res.data.userinfo.head_photo
-
+    async getMsg() {
+      let { data: res } = await this.$http.get("/userInfo/getUserInfo");
+      if (res.status === "success") {
+        res = forrmatFileUrl(res);
+        this.proFilePhoto = res.data.userinfo.head_photo;
       }
     },
-    onBottom () {
+    onBottom() {
       this.$nextTick(() => {
-        const msgBox = this.$refs.msgBox
+        const msgBox = this.$refs.msgBox;
         if (this.messageList.length > 5) {
-          window.scrollTo(0, msgBox.offsetHeight)
+          window.scrollTo(0, msgBox.offsetHeight);
         }
-      })
-    }
+      });
+    },
   },
-  updated () {
-    this.onBottom()
+  updated() {
+    this.onBottom();
   },
 
-  mounted () {
+  mounted() {
     // 获取用msgarr户之间的聊天记录
-    this.userId = Number(this.$route.query.userId)
-    this.getMsg()
+    this.userId = Number(this.$route.query.userId);
+    this.getMsg();
     // 到达最后一个消息的地方
     this.$nextTick(() => {
-      this.onBottom()
-    })
-
+      this.onBottom();
+    });
   },
-  async beforeDestroy () {
-    const { data: res } = await this.$http.put(`/notify/resetUnreadChat?chat_userid=${this.userId}`)
-    if (res.status !== 'success') {
-      throw new Error('重置聊天失败')
+  async beforeDestroy() {
+    const { data: res } = await this.$http.put(
+      `/notify/resetUnreadChat?chat_userid=${this.userId}`
+    );
+    if (res.status !== "success") {
+      throw new Error("重置聊天失败");
     }
-  }
-}
+  },
+};
 </script>
 
-<style lang='less' scoped>
+<style lang="less" scoped>
 .chattingRecords {
   overflow: auto;
   box-sizing: border-box;
@@ -161,7 +169,7 @@ export default {
   background-color: rgb(237, 238, 240);
 
   .message1::after {
-    content: '';
+    content: "";
     display: block;
     height: 0;
     clear: both;
@@ -195,7 +203,7 @@ export default {
   }
 
   .message1::after {
-    content: '';
+    content: "";
     display: block;
     height: 0;
     clear: both;
