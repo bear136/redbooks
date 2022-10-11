@@ -21,44 +21,43 @@ VueRouter.prototype.replace = function push (location, onResolve, onReject) {
 const routes = [
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/home'
   },
   {
-    path: "/home",
+    path: '/home',
     component: Home,
-    redirect: "/first",
+    redirect: '/first',
     children: [
       {
         path: '/first',
         name: 'First',
-        redirect: "/first/recommended",
+        redirect: '/first/recommended',
         component: () => import('../views/FirstPage.vue'),
         children: [
-          //推荐
+          // 推荐
           {
             path: 'recommended',
             name: 'recommended',
             component: () => import('../views/HomePage.vue'),
             meta: {
-              keepAlive: true, //需要缓存的页面
-            },
-
+              keepAlive: true // 需要缓存的页面
+            }
           },
           {
             path: 'focuse',
             name: 'focuse',
             component: () => import('../views/HomePage.vue'),
             meta: {
-              keepAlive: true, //需要缓存的页面
-            },
+              keepAlive: true // 需要缓存的页面
+            }
           },
           {
             path: 'discover',
             name: 'discover',
             component: () => import('../views/HomePage.vue'),
             meta: {
-              keepAlive: true, //需要缓存的页面
-            },
+              keepAlive: true // 需要缓存的页面
+            }
           }
         ]
       },
@@ -71,65 +70,65 @@ const routes = [
       {
         path: '/message',
         name: 'Message',
-        component: () => import('../views/Message.vue'),
+        component: () => import('../views/Message.vue')
       },
 
       {
         path: '/friends',
         name: 'friends',
         component: () => import('../views/Friends.vue')
-      },
+      }
 
     ]
   },
-  //登录
+  // 登录
   {
     path: '/login',
     name: 'login',
     component: () => import('../views/Login.vue')
   },
-  //注册
+  // 注册
   {
     path: '/register',
     name: 'register',
     component: () => import('../views/Register.vue')
   },
-  //发表文章
+  // 发表文章
   {
     path: '/addDynamic',
     name: 'AddDynamic',
     component: () => import('../views/AddDynamic.vue')
   },
-  //编辑个人信息
+  // 编辑个人信息
   {
     path: '/editInfo',
     name: 'EditInfo',
-    component: () => import('../components/editInfo/index.vue'),
+    component: () => import('../components/editInfo/index.vue')
   },
-  //聊天界面
+  // 聊天界面
   {
     path: '/chatpage',
     name: 'Chatpage',
-    component: () => import('../components/message/Chatpage.vue'),
+    component: () => import('../components/message/Chatpage.vue')
   },
   {
     path: '/detial',
     name: 'Detial',
-    component: () => import('../components/show/Detial.vue'),
+    component: () => import('../components/show/Detial.vue')
   },
-  //别人的个人主页
+  // 别人的个人主页
   {
-    path: "/otherPerson",
-    name: "otherPerson",
+    path: '/otherPerson',
+    name: 'otherPerson',
     component: () => import('../components/person/otherPerson')
   },
-  //关注点赞喜欢列表
+  // 关注点赞喜欢列表
   {
     path: '/fans',
     name: 'Fans',
     component: () => import('../components/person/Fans.vue')
   },
-  //视频展示界面
+  // 视频展示界面
   {
     path: '/video',
     name: 'video',
@@ -157,22 +156,22 @@ const routes = [
   {
     path: '/search',
     name: 'search',
-    component: () => import('../views/Search'),
+    component: () => import('../views/Search')
   },
   // 修改账户
   {
     path: '/editaccount',
     name: 'editAccount',
     component: () => import('../views/EditAccount'),
-    redirect: "/editaccount/accountInfo",
+    redirect: '/editaccount/accountInfo',
     children: [
       {
         path: 'accountInfo',
         name: 'accountInfo',
         component: () => import('../views/AccountInfo/AccountInfo'),
         meta: {
-          keepAlive: true, //需要缓存的页面
-        },
+          keepAlive: true // 需要缓存的页面
+        }
       },
       {
         path: 'sendMail',
@@ -202,16 +201,15 @@ const routes = [
 const router = new VueRouter({
   routes
 })
-//配置路由前置守卫实现没有登录不允许进入主页
+// 配置路由前置守卫实现没有登录不允许进入主页
 router.beforeEach((to, from, next) => {
   if (to.path === '/login' || to.path === '/register') {
     return next()
-  }
-  else {
+  } else {
     const tokenStr = window.localStorage.getItem('redBooksToken')
-    //如果没有token值，则直接强制跳转到登陆页面
+    // 如果没有token值，则直接强制跳转到登陆页面
     if (!tokenStr) return next('/login')
-    //反之直接放行
+    // 反之直接放行
     next()
   }
 })

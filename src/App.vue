@@ -6,7 +6,6 @@
     <!--不需要缓存的keep-alive 配置 展示内容-->
     <router-view v-if="!$route.meta.keepAlive" />
     <Notify />
-
   </div>
 </template>
 <script>
@@ -32,7 +31,7 @@ export default {
       if (msg !== '消息发送失败!' && msg !== 'ping') {
         const res = JSON.parse(msg)
         try {
-          if (res.type == 'history') {
+          if (res.type === 'history') {
             this.$store.dispatch('messInfo/addOldInfo', res)
           } else if (res.msg_type === 5 || res.msg_type === 6 || res.msg_type === 7) {
             this.$bus.$emit('showNotify', res)
@@ -92,4 +91,3 @@ export default {
   border-radius: 5px;
 }
 </style>
-

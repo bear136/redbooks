@@ -1,0 +1,12 @@
+#app{
+    max-width: 23.5rem;
+    margin: 0 auto;
+    position: relative;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.van-tabbar--fixed {
+    position: absolute;
+    width: 100%;
+}

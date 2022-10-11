@@ -311,7 +311,6 @@ export default {
 .nav_bar {
   height: 46px;
   width: 100%;
-  position: fixed;
   top: 0;
   box-sizing: border-box;
   padding: 10px;
