@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <router-view />
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive" />
+    </keep-alive>
+    <!--不需要缓存的keep-alive 配置 展示内容-->
+    <router-view v-if="!$route.meta.keepAlive" />
     <Notify />
 
   </div>
@@ -16,7 +20,7 @@ export default {
   },
   mounted () {
     const token = window.localStorage.getItem('redBooksToken')
-    if (token !== null) {
+    if (token != null) {
       this.$ws.connectWebsocket(this.callback)
     }
   },
@@ -45,17 +49,20 @@ export default {
 </script>
 <style lang="less">
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
+
 #app {
-    height: 100%;
-    width: 100%;
-    box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
+
 .van-swipe-cell__right {
-    right: -1px !important;
+  right: -1px !important;
 }
+
 // .van-tabs--line .van-tabs__wrap {
 //     border-bottom: 1px solid #ccc;
 //     box-sizing: border-box;
@@ -64,23 +71,25 @@ export default {
 //     // background-color: #0b1a1f !important;
 // }
 .van-tabs__nav--card {
-    margin: 0 !important;
-    font-size: 14px !important;
-    border: none !important;
-    // background-color: #f3f3f3 !important;
-    color: #727274 !important;
+  margin: 0 !important;
+  font-size: 14px !important;
+  border: none !important;
+  // background-color: #f3f3f3 !important;
+  color: #727274 !important;
 }
+
 .van-tabs__nav--card .van-tab.van-tab--active {
-    color: #515056 !important;
-    font-weight: bold !important;
-    background-color: #f3f3f3 !important;
+  color: #515056 !important;
+  font-weight: bold !important;
+  background-color: #f3f3f3 !important;
 }
+
 .van-tabs__nav--card .van-tab {
-    color: #727274 !important;
-    border-right: none !important;
-    margin-left: 10px;
-    background-color: #f3f3f3 !important;
-    border-radius: 5px;
+  color: #727274 !important;
+  border-right: none !important;
+  margin-left: 10px;
+  background-color: #f3f3f3 !important;
+  border-radius: 5px;
 }
 </style>
 

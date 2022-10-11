@@ -72,7 +72,6 @@ export default {
       if (!this.timer) {
         // 发送获取邮箱验证码的请求
         // 发送请求
-        console.log(this.getInfo.mail)
         const { data: res } = await this.$http.get('/sendCode', {
           params: {
             email: this.getInfo.mail

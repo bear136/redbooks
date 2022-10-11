@@ -73,7 +73,7 @@ export default {
     },
     async afterRead (file) {
       this.hashPath = await calculateHashSample(file.file)
-      console.log(this.hashPath)
+   
     },
     removeFile () {
       this.hashPath = ''

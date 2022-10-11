@@ -148,8 +148,9 @@ export default {
         width: 100%;
         background-color: #ccc;
         img {
-            height: 100%;
-            width: auto;
+            width: 100%;
+            height: auto;
+            object-fit: none;
         }
     }
 }

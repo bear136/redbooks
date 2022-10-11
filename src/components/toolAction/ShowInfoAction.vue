@@ -42,7 +42,7 @@ export default {
       this.isLike = result.isGiveLike === 0
     },
     async takeLike (item) {
-      console.log(this.msgItem)
+   
       const urlparams = this.isLike ? '/article/giveLike' : '/article/delLike'
       const count = this.isLike ? 1 : -1
       const { data: res } = await this.$http.put(`${urlparams}?article_id=${item.article_id}`)

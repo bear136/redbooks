@@ -26,31 +26,34 @@
             </div>
             <div class="focuspart">
               <!-- 关注 发信息 取消关注 模块-->
-              <van-button class="focus"
-                          v-show="!ifFocus"
-                          round
-                          @click="focus"
-                          hairline>关注</van-button>
-              <van-button v-show="ifFocus"
-                          round
-                          @click="gotoMessage"
-                          hairline>发消息</van-button>
-              <van-button size="small"
-                          @click="gotoMessage()"
-                          v-show="!ifFocus"
-                          round
-                          hairline>
-                <van-icon name="comment-o"
-                          size="20" />
-              </van-button>
-              <van-button size="small"
-                          @click="removeFocus"
-                          v-show="ifFocus"
-                          round
-                          hairline>
-                <van-icon name="passed"
-                          size="20" />
-              </van-button>
+              <div v-show="isNotSelf">
+                <van-button class="focus"
+                            v-show="!ifFocus"
+                            round
+                            @click="focus"
+                            hairline>关注</van-button>
+                <van-button v-show="ifFocus"
+                            round
+                            @click="gotoMessage"
+                            hairline>发消息</van-button>
+                <van-button size="small"
+                            @click="gotoMessage()"
+                            v-show="!ifFocus"
+                            round
+                            hairline>
+                  <van-icon name="comment-o"
+                            size="20" />
+                </van-button>
+                <van-button size="small"
+                            @click="removeFocus"
+                            v-show="ifFocus"
+                            round
+                            hairline>
+                  <van-icon name="passed"
+                            size="20" />
+                </van-button>
+              </div>
+
             </div>
           </div>
           <PersonWork v-bind:id='userid' />
@@ -69,6 +72,7 @@ export default {
   data () {
     return {
       userInfo: {},
+      isNotSelf: true,
       ifFocus: false,
       userid: this.$route.query.userId,
       follow_count: 0,
@@ -87,21 +91,26 @@ export default {
       const params = {
         relation_id: this.userid
       }
+
       this.$http.get('/relationInfo/getRelation', { params }).then(
         res => {
           res = res.data
-
           if (res.status === 'success') {
             const relationInfo = res.relationInfo
-
             this.userInfo = forrmatFileUrl(relationInfo.user_info)
-            this.ifFocus = relationInfo.status === 1 || relationInfo.status === 3
+            if (this.userid == window.sessionStorage.getItem('userid')) {
+              this.isNotSelf = false
+            } else {
+              this.ifFocus = relationInfo.status === 1 || relationInfo.status === 3
+            }
           }
         },
         err => {
           console.log(err)
         }
       )
+
+
     },
     getCount () {
       this.$http
@@ -112,7 +121,7 @@ export default {
         })
         .then((res, err) => {
           const { follow_fans_count } = res.data
-          console.log(res.data)
+        
           this.follow_count = follow_fans_count.follow_count
           this.fans_count = follow_fans_count.fans_count
         })
@@ -170,74 +179,83 @@ export default {
 
 <style lang='less' scoped>
 .userInfo {
-    height: 15rem;
+  height: 15rem;
+  width: 100%;
+
+  .bgImg {
+    height: 100%;
     width: 100%;
-    .bgImg {
-        height: 100%;
-        width: 100%;
-    }
-    ::v-deep .perInfo {
-        width: 100%;
-        position: absolute;
-        top: 46px !important;
-        display: flex;
-        align-items: center;
-        height: 6rem;
-        .perfile {
-            height: 80px;
-            width: 80px;
-            border-radius: 50%;
-            border: none;
-            margin-left: 2rem;
-        }
-        .userName {
-            font-size: 17px;
-            text-align: center;
-            margin-left: 10px;
-            box-sizing: border-box;
-            width: 7rem;
+  }
 
-            font-weight: 500;
-        }
-    }
-    ::v-deep .signature {
-        position: absolute;
-        font-size: 14px;
-        width: 100%;
-        top: 9rem;
-        padding: 14px 2rem;
-        box-sizing: border-box;
-    }
-    .attentionInfo {
-        width: 100%;
-        position: absolute;
-        top: 14rem;
+  ::v-deep .perInfo {
+    width: 100%;
+    position: absolute;
+    top: 46px !important;
+    display: flex;
+    align-items: center;
+    height: 6rem;
 
-        display: flex;
-        font-size: 14px;
-        text-align: center;
-        padding: 10px 10px;
-        box-sizing: border-box;
-        align-items: center;
-        justify-content: space-between;
-
-        color: #fff;
-
-        height: 3rem;
+    .perfile {
+      height: 80px;
+      width: 80px;
+      border-radius: 50%;
+      border: none;
+      margin-left: 2rem;
     }
+
+    .userName {
+      font-size: 17px;
+      text-align: center;
+      margin-left: 10px;
+      box-sizing: border-box;
+      width: 7rem;
+
+      font-weight: 500;
+    }
+  }
+
+  ::v-deep .signature {
+    position: absolute;
+    font-size: 14px;
+    width: 100%;
+    top: 9rem;
+    padding: 14px 2rem;
+    box-sizing: border-box;
+  }
+
+  .attentionInfo {
+    width: 100%;
+    position: absolute;
+    top: 14rem;
+
+    display: flex;
+    font-size: 14px;
+    text-align: center;
+    padding: 10px 10px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: space-between;
+
+    color: #fff;
+
+    height: 3rem;
+  }
 }
-.focuspart {
-    .focus {
-        height: 30px;
-        width: 80px;
-        background-color: rgba(255, 46, 68);
-        color: aliceblue;
-    }
 
-    .van-button {
-        margin-left: 10px;
-        box-sizing: border-box;
-        text-align: center;
-    }
+.focuspart {
+  width: 150px;
+
+  .focus {
+    height: 30px;
+    width: 80px;
+    background-color: rgba(255, 46, 68);
+    color: aliceblue;
+  }
+
+  .van-button {
+    margin-left: 10px;
+    box-sizing: border-box;
+    text-align: center;
+  }
 }
 </style>

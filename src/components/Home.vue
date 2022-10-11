@@ -10,7 +10,7 @@
       <van-tabbar-item icon="home-o"
                        to="/first">首页</van-tabbar-item>
       <van-tabbar-item icon="bag-o"
-                       to="/shop">商城</van-tabbar-item>
+                       to="/friends">朋友</van-tabbar-item>
       <van-tabbar-item color='#fff'
                        @click="addDynamicShow">
 
@@ -63,7 +63,7 @@ export default {
       selectType: false
     }
   },
-  mounted () {},
+  mounted () { },
   methods: {
     addDynamicShow () {
       this.selectType = true
@@ -89,42 +89,47 @@ export default {
 </script>
 <style lang="less" scoped>
 .van-tabs {
-    border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
 }
+
 .van-badge {
-    position: absolute;
-    top: 0px;
+  position: absolute;
+  top: 0px;
 }
+
 .addDyamic {
-    background-color: #f40;
-    height: 35px;
-    width: 35px;
-    text-align: center;
-    line-height: 35px;
-    border-radius: 50%;
+  background-color: #f40;
+  height: 35px;
+  width: 35px;
+  text-align: center;
+  line-height: 35px;
+  border-radius: 50%;
 }
+
 .van-popup {
-    padding: 10px;
-    box-sizing: border-box;
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
+  .selectList {
+    height: 200px;
+    width: 80%;
     display: flex;
     align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    .selectList {
-        height: 200px;
-        width: 80%;
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        div {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100px;
-            width: 100px;
-            font-size: 15px;
-        }
+    justify-content: space-around;
+
+    div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+      width: 100px;
+      font-size: 15px;
     }
+  }
 }
 </style>

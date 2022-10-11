@@ -44,6 +44,16 @@
                       description="选择文章类型"
                       @select="onSelectType"
                       close-on-click-action />
+
+    <van-overlay :show="overlayShow">
+      <div class="wrapper">
+        <div class="block">
+          <van-loading size="50px"
+                       vertical>文章上传中...</van-loading>
+        </div>
+
+      </div>
+    </van-overlay>
   </div>
 </template>
 
@@ -69,7 +79,8 @@ export default {
       },
       articleType: [],
       articleTypeShow: false,
-      video_show: false
+      video_show: false,
+      overlayShow: false
     }
   },
   components: {
@@ -151,9 +162,11 @@ export default {
         return
       }
       const data = this.forrmatArticInfo()
+      this.overlayShow = true
       const { data: res } = await this.$http.post('/article/publishedArticle', data)
       if (res.status === 'success') {
         this.$Toast.success('发布成功！')
+        this.overlayShow = false
         this.$router.push('/first')
       }
     }
@@ -180,5 +193,18 @@ video {
 }
 .article {
     padding: 10px;
+}
+.wrapper {
+    height: 200px;
+    width: 200px;
+    background-color: #fff;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 200px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>

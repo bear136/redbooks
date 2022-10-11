@@ -218,10 +218,10 @@ export default {
             this.$Toast.fail('请稍后重试')
           }
         }
-      } catch (error) {}
+      } catch (error) { }
     },
     goBack () {
-      this.$router.back()
+      this.$router.push('/home')
     },
     showAll () {
       this.showAllList = true
@@ -309,61 +309,69 @@ export default {
  
 <style lang="less" scoped>
 .nav_bar {
-    height: 46px;
-    width: 100%;
-    position: fixed;
-    top: 0;
+  height: 46px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  box-sizing: border-box;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  .van-search__content {
+    background-color: #f3f3f3;
+  }
+
+  .van-search {
+    width: 80%;
     box-sizing: border-box;
-    padding: 10px;
+  }
+
+  .searchBtn {
+    color: #f1355d;
+  }
+}
+
+.router_view_part {
+  margin-top: 50px;
+  box-sizing: border-box;
+
+  .van-divider {
+    width: 100%;
+    margin: 0;
+  }
+
+  .history_search {
+    width: 100%;
+    display: flex;
+
+    box-sizing: border-box;
+    padding: 15px;
+    flex-wrap: wrap;
+  }
+
+  .history_item {
+    height: 40px;
+    width: 40%;
+    color: #1b1a20;
+    box-sizing: border-box;
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    .van-search__content {
-        background-color: #f3f3f3;
-    }
+    justify-content: space-between;
+    margin-left: 20px;
 
-    .van-search {
-        width: 80%;
-        box-sizing: border-box;
+    span {
+      overflow: hidden;
+      height: 20px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
-    .searchBtn {
-        color: #f1355d;
-    }
-}
-.router_view_part {
-    margin-top: 50px;
-    box-sizing: border-box;
-    .van-divider {
-        width: 100%;
-        margin: 0;
-    }
-    .history_search {
-        width: 100%;
-        display: flex;
+  }
 
-        box-sizing: border-box;
-        padding: 15px;
-        flex-wrap: wrap;
-    }
-    .history_item {
-        height: 40px;
-        width: 40%;
-        color: #1b1a20;
-        box-sizing: border-box;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-left: 20px;
-        span {
-            overflow: hidden;
-            height: 20px;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-    }
-    .search_result_box {
-        width: 100%;
-    }
+  .search_result_box {
+    width: 100%;
+  }
 }
 </style>

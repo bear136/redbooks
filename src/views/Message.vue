@@ -88,13 +88,12 @@ export default {
   },
   methods: {
     // 实现下拉刷新
-    onRefresh () {
+    onRefresh (delay = 1000) {
       setTimeout(() => {
         this.isLoading = false
         this.msglist = forrmatFileUrl(this.$store.getters['messInfo/getAllMsg'])
-
         console.log('刷新成功')
-      }, 1000)
+      }, delay)
     },
     // 点击后进行跳转到聊天界面(查看聊天信息)
     skipChat (res) {
@@ -119,18 +118,28 @@ export default {
     async getUnreadChat () {
       const { data: res } = await this.$http.get('/notify/getUnreadChat')
       if (res.status === 'success') {
-        if (res.unreadChatList !== null && res.unreadChatList.length !== 0) {
-          console.log(res)
+      
+        if (res.unreadChatList != null && res.unreadChatList.length !== 0) {
           res.unreadChatList.map(item => {
-            this.$set(this.msglist.data[item.chat_userid], 'unreadInfo', item)
+            if (item.unread_num != 0) {
+              this.$set(this.msglist.data[item.chat_userid], 'unreadInfo', item)
+            }
           })
         }
       }
       this.msgShow = true
     }
   },
+  mounted () {
+  
+    this.onRefresh(0)
+  },
   created () {
-    this.msglist = forrmatFileUrl(this.$store.getters['messInfo/getAllMsg'])
+    try {
+      this.msglist = forrmatFileUrl(this.$store.getters['messInfo/getAllMsg'])
+    } catch (error) {
+      console.log(error)
+    }
     this.getNotifyCount()
     this.getUnreadChat()
   },
@@ -145,7 +154,7 @@ export default {
     },
     unreadChatNum () {
       return item => {
-        if (item === undefined) return
+        if (item === undefined) return 0
         else {
           return item.unread_num
         }
@@ -157,92 +166,102 @@ export default {
 
 <style lang='less' scoped>
 .topnav {
-    border-bottom: 1px solid #f0f0f0;
-    margin-top: 46px;
-    .van-col {
-        height: 80px;
-        width: 80px;
-        margin-top: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        position: relative;
-        .van-badge {
-            position: absolute;
-            right: 15px;
-            top: 5px;
-            z-index: 20;
-        }
-        .van-icon {
-            height: 35px;
-            width: 35px;
-            line-height: 35px;
-            text-align: center;
-            background-color: #ccc;
-            border-radius: 10px;
-        }
-        span {
-            font-size: 12px;
-            margin-top: 4px;
-        }
+  border-bottom: 1px solid #f0f0f0;
+  margin-top: 46px;
+
+  .van-col {
+    height: 80px;
+    width: 80px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+
+    .van-badge {
+      position: absolute;
+      right: 15px;
+      top: 5px;
+      z-index: 20;
     }
+
+    .van-icon {
+      height: 35px;
+      width: 35px;
+      line-height: 35px;
+      text-align: center;
+      background-color: #ccc;
+      border-radius: 10px;
+    }
+
+    span {
+      font-size: 12px;
+      margin-top: 4px;
+    }
+  }
 }
 
 //消息列表
 .bigmsg {
-    padding-bottom: 50px;
+  padding-bottom: 50px;
 }
+
 .msg {
-    height: 80px;
-    width: 100%;
-    display: flex;
+  height: 80px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  .van-image {
+    margin-left: 5px;
+  }
+
+  .rightbox {
+    width: 70%;
+    position: relative;
+    background-color: #fff;
+    padding: 2px;
+    box-sizing: border-box;
+    height: 50px;
     align-items: center;
     justify-content: space-around;
-    .van-image {
-        margin-left: 5px;
-    }
-    .rightbox {
-        width: 70%;
-        position: relative;
-        background-color: #fff;
-        padding: 2px;
-        box-sizing: border-box;
-        height: 50px;
-        align-items: center;
-        justify-content: space-around;
-        flex-direction: column;
+    flex-direction: column;
 
-        .title {
-            font-size: 16px;
-        }
-        .timer {
-            margin-left: 40px;
-            color: #ccc;
-            font-size: 14px;
-        }
-        p {
-            color: #ccc;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            margin-top: 4px;
-            font-size: 14px;
-        }
-        .unreadChat {
-            position: absolute;
-            right: 5px;
-            height: 20px;
-            width: 20px;
-            border-radius: 50%;
-            background-color: #ee0a24;
-            color: #fff;
-            top: 50%;
-            transform: translateY(-50%);
-            line-height: 20px;
-            text-align: center;
-            font-size: 14px;
-        }
+    .title {
+      font-size: 16px;
     }
+
+    .timer {
+      margin-left: 40px;
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    p {
+      color: #ccc;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      margin-top: 4px;
+      font-size: 14px;
+    }
+
+    .unreadChat {
+      position: absolute;
+      right: 5px;
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      background-color: #ee0a24;
+      color: #fff;
+      top: 50%;
+      transform: translateY(-50%);
+      line-height: 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+  }
 }
 </style>

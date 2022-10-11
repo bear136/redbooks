@@ -21,7 +21,7 @@ VueRouter.prototype.replace = function push (location, onResolve, onReject) {
 const routes = [
   {
     path: '/',
-    redirect: '/first',
+    redirect: '/home',
   },
   {
     path: "/home",
@@ -31,8 +31,38 @@ const routes = [
       {
         path: '/first',
         name: 'First',
-        component: () => import('../views/FirstPage.vue')
+        redirect: "/first/recommended",
+        component: () => import('../views/FirstPage.vue'),
+        children: [
+          //推荐
+          {
+            path: 'recommended',
+            name: 'recommended',
+            component: () => import('../views/HomePage.vue'),
+            meta: {
+              keepAlive: true, //需要缓存的页面
+            },
+
+          },
+          {
+            path: 'focuse',
+            name: 'focuse',
+            component: () => import('../views/HomePage.vue'),
+            meta: {
+              keepAlive: true, //需要缓存的页面
+            },
+          },
+          {
+            path: 'discover',
+            name: 'discover',
+            component: () => import('../views/HomePage.vue'),
+            meta: {
+              keepAlive: true, //需要缓存的页面
+            },
+          }
+        ]
       },
+
       {
         path: '/user',
         name: 'User',
@@ -45,9 +75,9 @@ const routes = [
       },
 
       {
-        path: '/shop',
-        name: 'Shop',
-        component: () => import('../views/Shop.vue')
+        path: '/friends',
+        name: 'friends',
+        component: () => import('../views/Friends.vue')
       },
 
     ]
@@ -139,7 +169,10 @@ const routes = [
       {
         path: 'accountInfo',
         name: 'accountInfo',
-        component: () => import('../views/AccountInfo/AccountInfo')
+        component: () => import('../views/AccountInfo/AccountInfo'),
+        meta: {
+          keepAlive: true, //需要缓存的页面
+        },
       },
       {
         path: 'sendMail',

@@ -23,7 +23,7 @@ export default {
         })
         .then(res => {
           res = res.data
-          console.log(res)
+
           if (res.status === 'success') {
             const typeStatus = res.relationInfo.status
             if (typeStatus === 1) {
@@ -50,4 +50,5 @@ export default {
 </script>
 
 <style>
+
 </style>

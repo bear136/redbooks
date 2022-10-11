@@ -15,9 +15,16 @@ export default {
             }
         },
         changeMsg (state, info) {
+            console.log(info)
             let sign = info.from_user
+            let data = ''
             //将接收到的消息转化为格式化
-            let data = `${info.send_time}+'receive'+${info.content}`
+            if (info.msgType == 'send') {
+                data = `${info.send_time}+send+${info.content}`
+            } else {
+                data = `${info.send_time}+receive+${info.content}`
+            }
+
             //给你发送信息的人原来给你发过消息
             state.historyMsg.data[sign].history_data.push(data)
 

@@ -70,7 +70,7 @@ export default {
       }, 2000)
     },
     initNotify (res) {
-      console.log(res)
+     
       this.msg_type = res.msg_type
       this.notifyContent = forrmatFileUrl(JSON.parse(res.content))
       this.show()
