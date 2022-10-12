@@ -50,7 +50,7 @@ export default {
   methods: {
     // 获取头像请求
     async getProfile (val) {
-      const { data: result } = await this.$http.get('/check', { params: { account: val } })
+      // const { data: result } = await this.$http.get('/check', { params: { account: val } })
     },
     checkPassword (val) {
       const phoneReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,10}$/
@@ -139,4 +139,4 @@ export default {
         }
     }
 }
-</style>>
+</style>

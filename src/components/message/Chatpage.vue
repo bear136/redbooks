@@ -52,109 +52,109 @@
 </template>
 
 <script>
-import moment from "moment";
-import { forrmatFileUrl } from "../../utils/utils";
+import moment from 'moment'
+import { forrmatFileUrl } from '../../utils/utils'
 export default {
-  data() {
+  data () {
     return {
       sendInfo: {
         type: 1,
-        content: "",
+        content: '',
         client_ids: [],
-        send_time: '',
+        send_time: ''
       },
       // 获取到对方用户的信息
-      userId: "",
+      userId: '',
       messageList: [],
       userInfo: {},
-      proFilePhoto: "",
-    };
+      proFilePhoto: ''
+    }
   },
   computed: {
-    msgarr() {
+    // eslint-disable-next-line vue/return-in-computed-property
+    msgarr () {
       try {
-        return this.$store.getters["messInfo/getMsg"](Number(this.$route.query.userId));
+        return this.$store.getters['messInfo/getMsg'](Number(this.$route.query.userId))
       } catch (error) {
-        console.log("computed", error);
+        console.log('computed', error)
       }
-    },
+    }
   },
   watch: {
     msgarr: {
-      handler(newVal, oldVal) {
+      handler (newVal, oldVal) {
         try {
           if (newVal != null) {
-            this.userInfo = forrmatFileUrl(newVal.user_info);
-            const historyMsg = newVal.history_data;
-            this.messageList = [];
+            this.userInfo = forrmatFileUrl(newVal.user_info)
+            const historyMsg = newVal.history_data
+            this.messageList = []
             historyMsg.forEach((i) => {
-              const arr = i.split("+");
-              this.messageList.push([arr[1], arr[2]]);
-            });
+              const arr = i.split('+')
+              this.messageList.push([arr[1], arr[2]])
+            })
           }
         } catch (error) {
-          console.log(error);
+          console.log(error)
         }
       },
       deep: true,
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
     sendMessage () {
-      if(!this.sendInfo.content) return;
-      this.sendInfo.client_ids = [`${this.userId}`];
-      this.sendInfo.send_time = moment().format('YYYY-MM-DD HH:mm:ss.SSS');
-      this.$ws.sendSock(this.sendInfo);
+      if (!this.sendInfo.content) return
+      this.sendInfo.client_ids = [`${this.userId}`]
+      this.sendInfo.send_time = moment().format('YYYY-MM-DD HH:mm:ss.SSS')
+      this.$ws.sendSock(this.sendInfo)
       this.$store.dispatch('messInfo/addUserMsg', {
         ...this.sendInfo,
         from_user: this.userId,
-        msgType: "send",
-      });
-      this.sendInfo.content = "";
+        msgType: 'send'
+      })
+      this.sendInfo.content = ''
     },
 
-    onClickLeft() {
-      this.$router.push("/message");
+    onClickLeft () {
+      this.$router.push('/message')
     },
-    async getMsg() {
-      let { data: res } = await this.$http.get("/userInfo/getUserInfo");
-      if (res.status === "success") {
-        res = forrmatFileUrl(res);
-        this.proFilePhoto = res.data.userinfo.head_photo;
+    async getMsg () {
+      let { data: res } = await this.$http.get('/userInfo/getUserInfo')
+      if (res.status === 'success') {
+        res = forrmatFileUrl(res)
+        this.proFilePhoto = res.data.userinfo.head_photo
       }
     },
-    onBottom() {
+    onBottom () {
       this.$nextTick(() => {
-        const msgBox = this.$refs.msgBox;
+        const msgBox = this.$refs.msgBox
         if (this.messageList.length > 5) {
-          window.scrollTo(0, msgBox.offsetHeight);
+          window.scrollTo(0, msgBox.offsetHeight)
         }
-      });
-    },
-  },
-  updated() {
-    this.onBottom();
-  },
-
-  mounted() {
-    // 获取用msgarr户之间的聊天记录
-    this.userId = Number(this.$route.query.userId);
-    this.getMsg();
-    // 到达最后一个消息的地方
-    this.$nextTick(() => {
-      this.onBottom();
-    });
-  },
-  async beforeDestroy() {
-    const { data: res } = await this.$http.put(
-      `/notify/resetUnreadChat?chat_userid=${this.userId}`
-    );
-    if (res.status !== "success") {
-      throw new Error("重置聊天失败");
+      })
     }
   },
-};
+  updated () {
+    this.onBottom()
+  },
+  mounted () {
+    // 获取用msgarr户之间的聊天记录
+    this.userId = Number(this.$route.query.userId)
+    this.getMsg()
+    // 到达最后一个消息的地方
+    this.$nextTick(() => {
+      this.onBottom()
+    })
+  },
+  async beforeDestroy () {
+    const { data: res } = await this.$http.put(
+      `/notify/resetUnreadChat?chat_userid=${this.userId}`
+    )
+    if (res.status !== 'success') {
+      throw new Error('重置聊天失败')
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

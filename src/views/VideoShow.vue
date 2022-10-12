@@ -94,7 +94,9 @@ export default {
   computed: {
     vedioContent () {
       if (this.content.length > 30) {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.content = this.content.slice(0, 30) + '...'
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.isExpend = true
       }
       return this.content

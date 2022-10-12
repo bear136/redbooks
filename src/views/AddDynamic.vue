@@ -112,6 +112,7 @@ export default {
     },
     forrmatArticInfo () {
       const formData = new FormData()
+      // eslint-disable-next-line camelcase
       const { title, content, is_video, release_time, article_type_id, cover_file, articleFileDir, coverFilePath } =
         this.articleInfo
       formData.append('title', title)
@@ -119,10 +120,12 @@ export default {
       formData.append('is_video', is_video)
       formData.append('release_time', release_time)
       formData.append('article_type_id', article_type_id)
+      // eslint-disable-next-line camelcase
       if (is_video === 1) {
         formData.append('articleFileDir', articleFileDir)
         formData.append('coverFilePath', coverFilePath)
       } else {
+        // eslint-disable-next-line camelcase
         formData.append('cover_file', cover_file || this.fileList[0].file)
         for (let i = 0; i < this.fileList.length; i++) {
           formData.append('article_file', this.fileList[i].file)

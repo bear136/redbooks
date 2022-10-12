@@ -62,18 +62,10 @@ export default {
   right: -1px !important;
 }
 
-// .van-tabs--line .van-tabs__wrap {
-//     border-bottom: 1px solid #ccc;
-//     box-sizing: border-box;
-// }
-// .van-tabs__line {
-//     // background-color: #0b1a1f !important;
-// }
 .van-tabs__nav--card {
   margin: 0 !important;
   font-size: 14px !important;
   border: none !important;
-  // background-color: #f3f3f3 !important;
   color: #727274 !important;
 }
 

@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div>
-      
-    </div>
     <Browse :info='articleInfoListByFriends'
             :isAll="friendIsAll"
             v-show="articleInfoListByFriends" />
@@ -16,7 +13,7 @@ import Browse from '../components/show/Browse.vue'
 import { forrmatFileUrl } from '../utils/utils'
 export default {
   components: {
-    Browse,
+    Browse
   },
   data () {
     return {
@@ -33,7 +30,6 @@ export default {
       const { data: res } = await this.$http.get('/article/getArticleFromFriend', {
         params: this.pageFriendInfo
       })
-     
       if (res.status === 'success') {
         return res.articleInfoList ? forrmatFileUrl(res.articleInfoList) : null
       }
@@ -54,10 +50,6 @@ export default {
     })
 
     this.$bus.$on('getAllarticle', this.getAll)
-  },
+  }
 }
 </script>
-
-<style>
-
-</style>

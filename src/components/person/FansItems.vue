@@ -36,6 +36,7 @@ export default {
     }
   },
   computed: {
+    // eslint-disable-next-line vue/return-in-computed-property
     personList () {
       if (this.list !== null) {
         return this.list.filter(item => {

@@ -1,31 +1,30 @@
+<!-- eslint-disable vue/no-unused-components -->
 <template>
   <div>
     <!-- 顶部导航区 -->
-    <van-tabs v-model="active"
-              @disabled='gotoSearch'
-              animated>
-      <van-tab title="关注"
-               to="/first/focuse">
+    <van-tabs v-model="active" @disabled="gotoSearch" animated>
+      <van-tab title="关注" to="/first/focuse">
         <router-view></router-view>
       </van-tab>
 
-      <van-tab title="推荐"
-               to="/first/recommended">
-
+      <van-tab title="推荐" to="/first/recommended">
         <router-view></router-view>
       </van-tab>
-      <van-tab title="发现"
-               to="/first/discover">
-        <van-tabs v-model="chiledActive"
-                  title-inactive-color='#ccc'
-                  title-active-color='#000'>
-          <van-tab v-for="item in typeList"
-                   :name="item.name"
-                   :to="path+item.name"
-                   :key="item.name">
+      <van-tab title="发现" to="/first/discover">
+        <van-tabs
+          v-model="chiledActive"
+          title-inactive-color="#ccc"
+          title-active-color="#000"
+        >
+          <van-tab
+            v-for="item in typeList"
+            :name="item.name"
+            :to="path + item.name"
+            :key="item.name"
+          >
             <template #title>
               <div class="typeTabs">
-                {{item.title}}
+                {{ item.title }}
               </div>
             </template>
             <router-view></router-view>
@@ -34,18 +33,14 @@
       </van-tab>
       <van-tab disabled>
         <template #title>
-          <van-icon name="search"
-                    size="20" />
+          <van-icon name="search" size="20" />
         </template>
       </van-tab>
-
     </van-tabs>
-
   </div>
 </template>
 
 <script>
-import Browse from '../components/show/Browse.vue'
 export default {
   data () {
     return {
@@ -57,13 +52,12 @@ export default {
     }
   },
   components: {
-    Browse
   },
   methods: {
     async getType () {
       const { data: res } = await this.$http.get('/article/getAllArticleType')
       if (res.status === 'success') {
-        res.articleTypeList.map(item => {
+        res.articleTypeList.map((item) => {
           this.typeList.push({
             name: item.article_type_id,
             title: item.article_type
@@ -96,30 +90,34 @@ export default {
   },
   mounted () {
     this.getType()
-    let path = this.$route.path
+    const path = this.$route.path
     this.type = path.slice(7, path.length)
   },
   computed: {
+    // eslint-disable-next-line vue/return-in-computed-property
     routerTo () {
       switch (this.type) {
         case 'recommended':
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.active = 1
           break
         case 'focuse':
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.active = 0
           break
         case 'discover':
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           this.active = 2
           break
         default:
           break
       }
-    },
+    }
   }
 }
 </script>
 
-<style lang='less' scoped>
+<style lang="less" scoped>
 .van-tabs {
   width: 100%;
 }

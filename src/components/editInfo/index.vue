@@ -137,7 +137,6 @@ export default {
     },
     async afterAsyncRead (fileData) {
       const formData = new FormData()
-   
       formData.append('head_photo_file', fileData.file)
       const { data: res } = await this.$http.post('/userInfo/headPhotoUpload', formData, {
         headers: {
@@ -153,7 +152,6 @@ export default {
     },
     async afterbgPhotoRead (fileData) {
       const formData = new FormData()
-    
       formData.append('back_photo_file', fileData.file)
       const { data: res } = await this.$http.post('/userInfo/backPhotoUpload', formData, {
         headers: {

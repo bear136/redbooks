@@ -138,6 +138,7 @@ export default {
         }
       })
       .then((res, err) => {
+        // eslint-disable-next-line camelcase
         const { follow_fans_count } = res.data
         this.follow_count = follow_fans_count.follow_count
         this.fans_count = follow_fans_count.fans_count
