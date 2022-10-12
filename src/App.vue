@@ -56,19 +56,30 @@ export default {
   height: 100%;
   width: 100%;
   box-sizing: border-box;
+  
 }
 
 .van-swipe-cell__right {
   right: -1px !important;
 }
 
-// .van-tabs--line .van-tabs__wrap {
-//     border-bottom: 1px solid #ccc;
-//     box-sizing: border-box;
-// }
-// .van-tabs__line {
-//     // background-color: #0b1a1f !important;
-// }
+.van-nav-bar {
+  max-width: 23.5rem !important;
+}
+
+.van-nav-bar--fixed {
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+.van-tabbar--fixed {
+  position: fixed;
+  max-width: 23.5rem;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  bottom: 0 !important;
+}
+
 .van-tabs__nav--card {
   margin: 0 !important;
   font-size: 14px !important;

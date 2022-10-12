@@ -51,32 +51,35 @@ export default {
 
 <style scoped lang='less'>
 .putContent {
-    position: fixed;
-    background-color: #fff;
-    bottom: 0px;
-    min-height: 60px;
-    box-sizing: border-box;
-    border-top: 1px solid #ccc;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    .van-field {
-        height: 100%;
-        width: 80%;
-        border-radius: 10px;
-        margin-top: 10px;
-        overflow-x: hidden;
-        background-color: #f0f0f0;
-    }
-    .van-button {
-        color: #fff;
-        margin-top: 10px;
-        background-color: #f40;
-        font-size: 22px;
-        border-radius: 50%;
-        height: 44px;
-        width: 44px;
-    }
+  position: fixed;
+  background-color: #fff;
+  bottom: 0px;
+  min-height: 60px;
+  box-sizing: border-box;
+  border-top: 1px solid #ccc;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  max-width: 23.5rem;
+
+  .van-field {
+    height: 100%;
+    width: 80%;
+    border-radius: 10px;
+    margin-top: 10px;
+    overflow-x: hidden;
+    background-color: #f0f0f0;
+  }
+
+  .van-button {
+    color: #fff;
+    margin-top: 10px;
+    background-color: #f40;
+    font-size: 22px;
+    border-radius: 50%;
+    height: 44px;
+    width: 44px;
+  }
 }
 </style>

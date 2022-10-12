@@ -2,8 +2,7 @@
   <div class="perWord">
     <van-tabs v-model="active"
               @click="changeBrow"
-              animated
-              sticky>
+              animated>
       <van-tab title="作品">
         <Browse v-bind:info='allMsgInfo'
                 v-show="allMsgInfo" />
@@ -95,4 +94,5 @@ export default {
 </script>
 
 <style lang='less'>
+
 </style>

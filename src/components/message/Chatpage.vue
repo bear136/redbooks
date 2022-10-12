@@ -231,6 +231,7 @@ export default {
 }
 
 .inputbox {
+  max-width: 23.5rem;
   position: fixed;
   bottom: 0;
   min-height: 75px;

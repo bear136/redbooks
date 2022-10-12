@@ -134,88 +134,100 @@ export default {
     this.reviewObj.comment_group = Number(this.msgId)
     this.getMsgInfo()
   },
-  mounted () {}
+  mounted () { }
 }
 </script>
 
 <style lang='less' scoped>
 .detialBox {
-    overflow: auto;
+  overflow: auto;
 }
+
 .swipbox {
-    .van-swipe-item {
-        height: 400px;
-        width: 100%;
-        background-color: #ccc;
-        img {
-            width: 100%;
-            height: auto;
-            object-fit: none;
-        }
-    }
-}
-.articleInfo {
-    border-top: 1px solid #f0f0f0;
+  .van-swipe-item {
     width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-    .title {
-        margin-top: 10px;
-        font-size: 18.5px;
-        color: rgb(57, 57, 57);
+    max-height: 500px; 
+    background-color: #ccc;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: none;
     }
-    .articleContext {
-        margin-top: 8px;
-        font-weight: 330;
-        font-size: 16px;
-        font-family: 微软雅黑;
-        .article_type {
-            font-size: 16px;
-            font-weight: 500;
-        }
-    }
-    .creatInfo {
-        margin-top: 15px;
-        height: 30px;
-        width: 100%;
-        border-bottom: 1px solid rgb(232, 232, 232);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        .creatTime {
-            color: #ccc;
-            font-size: 14px;
-        }
-        .notLike {
-            height: 20px;
-            width: 60px;
-            border-radius: 20px;
-            border: 1px solid #ccc;
-            text-align: center;
-            line-height: 20px;
-            font-size: 14px;
-            color: #ccc;
-        }
-    }
+  }
 }
-.underbox {
-    width: 130px;
-    background-color: #fff;
-    box-sizing: border-box;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+
+.articleInfo {
+  border-top: 1px solid #f0f0f0;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+
+  .title {
+    margin-top: 10px;
+    font-size: 18.5px;
+    color: rgb(57, 57, 57);
+  }
+
+  .articleContext {
+    margin-top: 8px;
+    font-weight: 330;
+    font-size: 16px;
+    font-family: 微软雅黑;
+
+    .article_type {
+      font-size: 16px;
+      font-weight: 500;
+    }
+  }
+
+  .creatInfo {
+    margin-top: 15px;
+    height: 30px;
+    width: 100%;
+    border-bottom: 1px solid rgb(232, 232, 232);
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    .funbox {
-        text-align: center;
-        font-size: 17px;
-        /deep/ span {
-            text-align: center;
-            display: inline-block;
-            height: 100%;
-            width: 30px;
-        }
+    justify-content: space-between;
+
+    .creatTime {
+      color: #ccc;
+      font-size: 14px;
     }
+
+    .notLike {
+      height: 20px;
+      width: 60px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      text-align: center;
+      line-height: 20px;
+      font-size: 14px;
+      color: #ccc;
+    }
+  }
+}
+
+.underbox {
+  width: 130px;
+  background-color: #fff;
+  box-sizing: border-box;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  .funbox {
+    text-align: center;
+    font-size: 17px;
+
+    /deep/ span {
+      text-align: center;
+      display: inline-block;
+      height: 100%;
+      width: 30px;
+    }
+  }
 }
 </style>
