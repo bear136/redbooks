@@ -118,10 +118,9 @@ export default {
     async getUnreadChat () {
       const { data: res } = await this.$http.get('/notify/getUnreadChat')
       if (res.status === 'success') {
-      
         if (res.unreadChatList != null && res.unreadChatList.length !== 0) {
           res.unreadChatList.map(item => {
-            if (item.unread_num != 0) {
+            if (item.unread_num !== 0) {
               this.$set(this.msglist.data[item.chat_userid], 'unreadInfo', item)
             }
           })
@@ -131,7 +130,6 @@ export default {
     }
   },
   mounted () {
-  
     this.onRefresh(0)
   },
   created () {

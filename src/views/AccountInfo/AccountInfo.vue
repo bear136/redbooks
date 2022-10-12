@@ -44,6 +44,7 @@ export default {
       const tel = this.accountInfo.tel
       return tel.substring(0, 3) + '****' + tel.substring(7, 12)
     },
+    // eslint-disable-next-line vue/return-in-computed-property
     email () {
       const mail = this.accountInfo.mail
       if (mail !== '') {

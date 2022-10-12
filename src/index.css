@@ -10,3 +10,9 @@
     position: absolute;
     width: 100%;
 }
+
+.chattingRecords > div{
+    height: calc(100% - 121px);
+    margin-bottom: 100px;
+}
+

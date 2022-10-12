@@ -154,6 +154,7 @@ export default {
     this.$bus.$on('changeLikeStatus', this.getReviewInfo)
   },
   methods: {
+    // eslint-disable-next-line camelcase
     async lastComment (comment_id, article_id) {
       try {
         this.secondContentCutObj.pageIndex++
@@ -166,6 +167,7 @@ export default {
         })
         if (res.status === 'success') {
           this.firstInfo.map(item => {
+            // eslint-disable-next-line camelcase
             if (item.comment_id === comment_id) {
               if (res.commentList === null) {
                 this.$set(item, 'showLast', false)
@@ -206,6 +208,7 @@ export default {
     refreshReviewList () {
       this.getReviewInfo()
     },
+    // eslint-disable-next-line camelcase
     takeReview (reply_comment_id, reply_user_id, comment_group) {
       this.$store.dispatch('reviewInfo/addReviewInfo', {
         level: 2,
@@ -233,6 +236,7 @@ export default {
         this.finished = false
       }
     },
+    // eslint-disable-next-line camelcase
     async showSecondReview (comment_id, article_id) {
       const { data: res } = await this.$http.get('/comment/getReplyCommentByHeat', {
         params: {
@@ -243,6 +247,7 @@ export default {
         }
       })
       this.firstInfo.map(item => {
+        // eslint-disable-next-line camelcase
         if (item.comment_id === comment_id) {
           if (res.commentList === null) {
             return
@@ -257,7 +262,9 @@ export default {
     goToPersonInfo (id) {
       this.$router.push({ name: 'otherPerson', query: { userId: id } })
     },
+    // eslint-disable-next-line camelcase
     async removeReview (userid, comment_id, level, article_id) {
+      // eslint-disable-next-line camelcase
       const author_id = this.$store.getters['reviewInfo/getUserId']
       const { data: res } = await this.$http.get('/comment/removePermission', {
         params: {

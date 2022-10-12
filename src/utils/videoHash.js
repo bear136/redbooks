@@ -4,8 +4,8 @@ const reader = new FileReader()
 //文件阈值
 const FILESIZE_THRESHOLD = 5000 * 1024 * 1024
 function calculateHashSample (file) {
-    const size = file.size
-    let chunks = []
+  const size = file.size
+let chunks = []
     return new Promise(resolve => {
         if (size >= FILESIZE_THRESHOLD) {
             chunks = largeFileHash(file)
@@ -20,7 +20,7 @@ function calculateHashSample (file) {
     })
 }
 //大文件计算hash
-function largeFileHash (file) {
+function largeFileHash(file) {
     const size = file.size
     const offset = 5 * 1024 * 1024   //设置5M为一个切片
     let chunks = [file.slice(0, offset)]   //存入头部第一个切片
@@ -42,7 +42,7 @@ function largeFileHash (file) {
 }
 
 //文章切片
-function createFileChunk (file, size) {
+function createFileChunk(file, size) {
     if (!file) return
     const fileChunkList = []
     let cur = 0
@@ -53,7 +53,7 @@ function createFileChunk (file, size) {
     return fileChunkList
 }
 //构建上传列表
-function formatterChunkList (fileChunkList) {
+function formatterChunkList(fileChunkList) {
     const requestList = []
     fileChunkList.map(({ hashPath, chunkFile, chunkIndex }) => {
         const formData = new FormData()

@@ -98,7 +98,7 @@ export default {
           if (res.status === 'success') {
             const relationInfo = res.relationInfo
             this.userInfo = forrmatFileUrl(relationInfo.user_info)
-            if (this.userid == window.sessionStorage.getItem('userid')) {
+            if (this.userid === window.sessionStorage.getItem('userid')) {
               this.isNotSelf = false
             } else {
               this.ifFocus = relationInfo.status === 1 || relationInfo.status === 3
@@ -109,8 +109,6 @@ export default {
           console.log(err)
         }
       )
-
-
     },
     getCount () {
       this.$http
@@ -120,8 +118,8 @@ export default {
           }
         })
         .then((res, err) => {
+          // eslint-disable-next-line camelcase
           const { follow_fans_count } = res.data
-        
           this.follow_count = follow_fans_count.follow_count
           this.fans_count = follow_fans_count.fans_count
         })

@@ -183,7 +183,7 @@ export default {
         })
 
         if (res.status === 'success') {
-          if (res.searchRecordList.length == 0) {
+          if (res.searchRecordList.length === 0) {
             this.isAll = true
 
             return
@@ -306,7 +306,7 @@ export default {
   }
 }
 </script>
- 
+
 <style lang="less" scoped>
 .nav_bar {
   height: 46px;

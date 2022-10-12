@@ -59,7 +59,9 @@ export default {
         if (item.is_video === 1) {
           return item.cover_url ? item.cover_url : this.defalute
         } else {
+          // eslint-disable-next-line camelcase
           const resource_url = item.resource_url ? item.resource_url[0] : this.defalute
+          // eslint-disable-next-line camelcase
           return item.cover_url ? item.cover_url : resource_url
         }
       }

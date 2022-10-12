@@ -144,13 +144,11 @@ export default {
 }
 .swipbox {
     .van-swipe-item {
-        height: 400px;
         width: 100%;
         background-color: #ccc;
         img {
             width: 100%;
             height: auto;
-            object-fit: none;
         }
     }
 }
